@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
+import { UserRepository } from '../data/user.repository';
 /**
  * AuthModule encapsulates all authentication features.
  * Configures JwtModule, PassportModule, registers AuthController and AuthService,
@@ -26,7 +27,7 @@ import { JwtStrategy } from './jwt.strategy';
     ConfigModule, // Make sure ConfigModule is imported if you're using it
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, UserRepository],
   exports: [AuthService, JwtModule, PassportModule], // Export AuthService and JwtModule if other modules need them
 })
 export class AuthModule {}
