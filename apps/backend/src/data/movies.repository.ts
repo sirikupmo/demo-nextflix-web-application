@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
-export class FreeMovieApiRepository {
+export class MovieApiRepository {
   private readonly API_BASE_URL = process.env.TMDB_URL; // Example Free Movie API
   private readonly API_ACCESS_TOKEN = process.env.TMDB_TOKEN; // Replace with your actual API key
 

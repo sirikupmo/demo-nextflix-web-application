@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
-import { FreeMovieApiRepository } from '../data/movies.repository'; // This is from the Data Layer
-
+import { MovieApiRepository } from '../data/movies.repository'; // This is from the Data Layer
+import { HttpModule } from '@nestjs/axios';
 @Module({
+    imports: [HttpModule],
     controllers: [MoviesController],
-    providers: [MoviesService, FreeMovieApiRepository],
+    providers: [MoviesService, MovieApiRepository],
 })
 export class MoviesModule { }

@@ -1,13 +1,13 @@
 // src/movies/movies.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FreeMovieApiRepository } from '../data/movies.repository'; // This is from the Data Layer
+import { MovieApiRepository } from '../data/movies.repository'; // This is from the Data Layer
 
 @Injectable()
 export class MoviesService {
-    constructor(private readonly freeMovieApiRepository: FreeMovieApiRepository) { }
+    constructor(private readonly MovieApiRepository: MovieApiRepository) { }
 
     async getPopularMovies(page: number, language: string): Promise<any | null> {
-        const apiResponse = await this.freeMovieApiRepository.fetchPopularMovies(page, language);
+        const apiResponse = await this.MovieApiRepository.fetchPopularMovies(page, language);
         // Perform data transformation from API response to your Movie entity
         return apiResponse;
     }
