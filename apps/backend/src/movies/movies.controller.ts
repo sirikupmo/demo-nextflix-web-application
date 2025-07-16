@@ -6,7 +6,7 @@ import { MoviesService } from './movies.service'; // This is from the Domain Lay
 export class MoviesController {
     constructor(private readonly moviesService: MoviesService) { }
 
-    @Get()
+    @Get('popular')
     async getPopularMovies(@Query('page') page: number = 1, @Query('language') language: string = 'en-US') {
         // Basic validation if needed
         const movies = await this.moviesService.getPopularMovies(page, language);
