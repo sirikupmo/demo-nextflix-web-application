@@ -2,6 +2,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository, User } from '../data/user.repository'; 
+import { ProfileService } from '../profile/profile.service';
+import { Profile } from '../data/profile.repository';
 /**
  * Service responsible for user authentication and JWT token generation.
  * Simulates user data storage and validation.
@@ -12,6 +14,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
+    private readonly profileService: ProfileService,
   ) {}
 
   /**
@@ -49,6 +52,31 @@ export class AuthService {
         id: user.id,
         email: user.email,
       },
+    };
+  }
+
+  /**
+   * Retrieves the authenticated user's details and their associated profiles.
+   * @param userId - The ID of the authenticated user.
+   * @returns An object containing user details and a list of profiles.
+   * @throws NotFoundException if the user is not found (though unlikely after JWT validation).
+   */
+  async getMe(userId: string): Promise<{ user: Omit<User, 'password'>; profiles: Profile[] }> {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      // This case should ideally not happen if JWT validation is successful
+      throw new UnauthorizedException('User not found.');
+    }
+
+    // Exclude password from the user object before returning
+    const { password, ...userWithoutPassword } = user;
+
+    const profiles = await this.profileService.getProfiles(userId);
+
+    return {
+      user: userWithoutPassword,
+      profiles: profiles,
     };
   }
 }

@@ -1,5 +1,5 @@
 // src/auth/auth.module.ts
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from '../data/user.repository';
+import { ProfileModule } from '../profile/profile.module';
 /**
  * AuthModule encapsulates all authentication features.
  * Configures JwtModule, PassportModule, registers AuthController and AuthService,
@@ -24,7 +25,10 @@ import { UserRepository } from '../data/user.repository';
       }),
       inject: [ConfigService], // Inject ConfigService into the factory
     }),
-    ConfigModule, // Make sure ConfigModule is imported if you're using it
+    ConfigModule,
+    // Use forwardRef to resolve circular dependency:
+    // AuthModule imports ProfileModule, and ProfileModule imports AuthModule (for JwtAuthGuard)
+    forwardRef(() => ProfileModule),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, UserRepository],

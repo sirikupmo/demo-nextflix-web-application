@@ -1,15 +1,15 @@
 // src/auth/auth.controller.ts
-import { Controller, Post, Body, HttpCode, HttpStatus, UsePipes, ValidationPipe, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards, Request, UsePipes, ValidationPipe, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-
+import { JwtAuthGuard } from './jwt-auth.guard';
 /**
  * Controller for authentication-related endpoints.
  * Handles the 'auth/login' API route.
  */
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   /**
    * Handles user login.
@@ -29,5 +29,20 @@ export class AuthController {
     }
 
     return this.authService.login(user);
+  }
+
+  /**
+   * Retrieves the authenticated user's own data and their list of profiles.
+   * This endpoint requires a valid JWT token.
+   * @param req - The request object, containing user details from the JWT payload.
+   * @returns An object containing the user's details and their profiles.
+   */
+  @UseGuards(JwtAuthGuard) // Protect this endpoint with JWT authentication
+  @Get('me')
+  async getMe(@Request() req: any) {
+    // req.user contains the payload returned by JwtStrategy.validate()
+    const userId = req.user.userId;
+    const data = await this.authService.getMe(userId);
+    return data;
   }
 }
