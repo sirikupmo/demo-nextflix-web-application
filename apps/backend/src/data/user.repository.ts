@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
  * This can be extended as needed.
  */
 export interface User {
-  id: number | string; // User ID can be a number or string
+  id: string; // User ID can be a number or string
   email: string;
   password?: string; // Password might be optional if not always fetched or for security
 }
@@ -21,12 +21,12 @@ export class UserRepository {
   // Mock user data simulating a JSON response from an external source
   private readonly mockUsers: User[] = [
     {
-      id: 1,
+      id: 'user1',
       email: 'user@example.com',
       password: '123456', // In a real app, this would be hashed and stored securely
     },
     {
-      id: 2,
+      id: 'user2',
       email: 'user2@example.com',
       password: '123456',
     }
