@@ -9,6 +9,30 @@ export class MovieApiRepository {
 
   constructor(private readonly httpService: HttpService) {}
 
+  async searchAll(query: string, page: number = 1): Promise<any> {
+    const url = `${this.API_BASE_URL}/search/keyword`;
+    
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          params: {
+            query,
+            page,
+          },
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${this.API_ACCESS_TOKEN}`,
+          },
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error searching movies:', error);
+      throw new Error('Failed to search movies');
+    }
+  }
+
   async fetchPopularMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
     const url = `${this.API_BASE_URL}/movie/popular`;
     
@@ -31,6 +55,81 @@ export class MovieApiRepository {
       // Handle errors appropriately
       console.error('Error fetching popular movies:', error);
       throw new Error('Failed to fetch popular movies');
+    }
+  }
+
+  async fetchTopRatedMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+    const url = `${this.API_BASE_URL}/movie/top_rated`;
+    
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          params: {
+            language,
+            page,
+          },
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${this.API_ACCESS_TOKEN}`,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching top-rated movies:', error);
+      throw new Error('Failed to fetch top-rated movies');
+    }
+  }
+
+  async fetchUpcomingMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+    const url = `${this.API_BASE_URL}/movie/upcoming`;
+    
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          params: {
+            language,
+            page,
+          },
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${this.API_ACCESS_TOKEN}`,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching upcoming movies:', error);
+      throw new Error('Failed to fetch upcoming movies');
+    }
+  }
+
+  async fetchNowPlayingMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+    const url = `${this.API_BASE_URL}/movie/now_playing`;
+    
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          params: {
+            language,
+            page,
+          },
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${this.API_ACCESS_TOKEN}`,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching now playing movies:', error);
+      throw new Error('Failed to fetch now playing movies');
     }
   }
 }

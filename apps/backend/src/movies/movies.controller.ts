@@ -8,26 +8,41 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class MoviesController {
     constructor(private readonly moviesService: MoviesService) { }
 
+    @Get('search')
+    async searchAll(@Query('query') query: string, @Query('page') page: number = 1, @Request() req: any) {
+        if (!query) {
+            return [];
+        }
+        console.log('User searching movies:', req.user);
+        const movies = await this.moviesService.searchAll(query, page, req.user);
+        return movies;
+    }
+
     @Get('popular')
-    async getPopularMovies(@Query('page') page: number = 1, @Query('language') language: string = 'en-US', @Request() req: any) {
+    async getPopularMovies(@Query('page') page: number = 1, @Query('language') language: string = 'th-TH', @Request() req: any) {
         console.log('User accessing popular movies:', req.user);
         const movies = await this.moviesService.getPopularMovies(page, language, req.user);
         return movies;
     }
 
-    //   @Get(':id')
-    //   async getMovieById(@Param('id') id: string) {
-    //     const movie = await this.moviesService.getMovieById(id);
-    //     return { data: movie, message: 'Movie details fetched successfully' };
-    //   }
+    @Get('top-rated')
+    async getTopRateMovies(@Query('page') page: number = 1, @Query('language') language: string = 'th-TH', @Request() req: any) {
+        console.log('User accessing popular movies:', req.user);
+        const movies = await this.moviesService.getTopRateMovies(page, language, req.user);
+        return movies;
+    }
 
-    //   @Get('search')
-    //   async searchMovies(@Query('query') query: string) {
-    //     if (!query) {
-    //       // Handle error or return empty
-    //       return { data: [], message: 'Please provide a search query.' };
-    //     }
-    //     const movies = await this.moviesService.searchMovies(query);
-    //     return { data: movies, message: 'Movies searched successfully' };
-    //   }
+    @Get('upcoming')
+    async getUpcomingMovies(@Query('page') page: number = 1, @Query('language') language: string = 'th-TH', @Request() req: any) {
+        console.log('User accessing upcoming movies:', req.user);
+        const movies = await this.moviesService.getUpcomingMovies(page, language, req.user);
+        return movies;
+    }
+
+    @Get('now-playing')
+    async getNowPlayingMovies(@Query('page') page: number = 1, @Query('language') language: string = 'th-TH', @Request() req: any) {
+        console.log('User accessing now playing movies:', req.user);
+        const movies = await this.moviesService.getNowPlayingMovies(page, language, req.user);
+        return movies;
+    }
 }

@@ -6,12 +6,43 @@ import { MovieApiRepository } from '../data/movies.repository'; // This is from 
 export class MoviesService {
     constructor(private readonly MovieApiRepository: MovieApiRepository) { }
 
+    async searchAll(query: string, page: number, user?: any): Promise<any | null> {
+        if (user) {
+            console.log(`User searching movies: ${user.email} (ID: ${user.userId})`);
+        }
+        const apiResponse = await this.MovieApiRepository.searchAll(query, page);
+        return apiResponse;
+    }
+
     async getPopularMovies(page: number, language: string, user?: any): Promise<any | null> {
         if (user) {
             console.log(`Fetching popular movies for user: ${user.email} (ID: ${user.userId})`);
         }
         const apiResponse = await this.MovieApiRepository.fetchPopularMovies(page, language);
-        // Perform data transformation from API response to your Movie entity
+        return apiResponse;
+    }
+
+    async getTopRateMovies(page: number, language: string, user?: any): Promise<any | null> {
+        if (user) {
+            console.log(`Fetching top-rated movies for user: ${user.email} (ID: ${user.userId})`);
+        }
+        const apiResponse = await this.MovieApiRepository.fetchTopRatedMovies(page, language);
+        return apiResponse;
+    }
+
+    async getUpcomingMovies(page: number, language: string, user?: any): Promise<any | null> {
+        if (user) {
+            console.log(`Fetching upcoming movies for user: ${user.email} (ID: ${user.userId})`);
+        }
+        const apiResponse = await this.MovieApiRepository.fetchUpcomingMovies(page, language);
+        return apiResponse;
+    }
+
+    async getNowPlayingMovies(page: number, language: string, user?: any): Promise<any | null> {
+        if (user) {
+            console.log(`Fetching now playing movies for user: ${user.email} (ID: ${user.userId})`);
+        }
+        const apiResponse = await this.MovieApiRepository.fetchNowPlayingMovies(page, language);
         return apiResponse;
     }
 }
