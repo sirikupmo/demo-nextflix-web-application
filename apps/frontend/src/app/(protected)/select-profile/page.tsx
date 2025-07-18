@@ -18,8 +18,8 @@ export default function SelectProfilePage() {
   const router = useRouter();
   const authService = new AuthService();
 
-  const handleLogout = () => {
-    authService.logout();
+  const handleLogout = async () => { // Made async to await backend logout
+    await authService.logout(); // Call backend logout
     router.push('/login'); // Redirect to login page after logout
   };
 

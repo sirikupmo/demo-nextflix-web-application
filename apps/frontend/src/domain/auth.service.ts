@@ -31,12 +31,15 @@ export class AuthService {
       const loginResponse = await this.authRepository.login(credentials);
       console.log('AuthService - Login API Response (processed):', loginResponse);
 
-      setLoginSuccess(loginResponse.access_token, loginResponse.user);
+      setLoginSuccess(loginResponse.user);
 
     } catch (error: unknown) { // Changed to unknown
       console.error('AuthService - Login error caught:', error);
       // Safely access error message
       setError((error as Error).message || 'An unknown error occurred during login.');
+    } finally {
+      setLoading(false);
+      console.log('AuthService - Login process finished.');
     }
   }
 
@@ -44,8 +47,17 @@ export class AuthService {
    * Handles the user logout process.
    * Clears authentication data from the store.
    */
-  logout(): void {
-    useAuthStore.getState().logout();
+  async logout(): Promise<void> {
+    const { logout: storeLogout, setError } = useAuthStore.getState();
+    try {
+      await this.authRepository.logout(); // Call backend to clear cookie
+      storeLogout(); // Clear frontend state
+      console.log('Frontend and Backend logout successful.');
+    } catch (error: unknown) {
+      console.error('AuthService - Logout error caught:', error);
+      setError((error as Error).message || 'An unknown error occurred during logout.');
+      storeLogout(); // Still clear frontend state even if backend fails to ensure consistency
+    }
   }
 
   /**
@@ -69,29 +81,22 @@ export class AuthService {
     setLoading(true); // Set loading state for the check
 
     try {
-      const currentToken = localStorage.getItem('authToken'); // Always get token from localStorage
-
-      if (!currentToken) {
-        console.log('initializeAuth: No token found. Logging out.');
-        logout(); // Ensure state is reset to logged out
-        return; // Exit early if no token
-      }
-
       console.log('initializeAuth: Token found, fetching /auth/me...');
-      const meData = await this.authRepository.getMe(currentToken);
+      const meData = await this.authRepository.getMe();
 
       // *** ADDED ROBUST CHECKS HERE ***
       if (!meData || !meData.user || !meData.profiles) {
         console.error('initializeAuth: Incomplete or malformed meData received:', meData);
         throw new Error('Invalid or incomplete user data received from /auth/me API');
       }
-      console.log('initializeAuth: meData fetched and validated:', meData);
+
+      // console.log('initializeAuth: meData fetched and validated:', meData);
 
       // Set all authentication data (token, user, profiles) in one go
-      setAuthData(currentToken, meData.user, meData.profiles);
-
+      setAuthData(meData.user, meData.profiles);
+      
     } catch (error: unknown) { // Changed to unknown
-      console.error('AuthService - initializeAuth error caught:', error);
+      // console.error('AuthService - initializeAuth error caught:', error);
       logout(); // Clear invalid token
       // Safely access error message
       setError((error as Error).message || 'Session expired. Please log in again.');

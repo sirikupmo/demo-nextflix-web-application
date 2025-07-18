@@ -2,7 +2,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-
+import { Request } from 'express';
 /**
  * Interface for the JWT payload.
  * Defines the structure of data stored inside the JWT.
@@ -15,6 +15,27 @@ export interface JwtPayload {
 }
 
 /**
+ * Custom JWT extractor function to get token from cookie or Authorization header.
+ * @param req - The Express request object.
+ * @returns The JWT token string if found, otherwise null.
+ */
+const jwtExtractor = (req: Request): string | null => {
+  let token = null;
+  // 1. Try to get token from cookie
+  if (req && req.cookies) {
+    token = req.cookies['jwt']; // 'jwt' is the name of our cookie
+  }
+  // 2. If not found in cookie, try Authorization header (Bearer token)
+  if (!token && req && req.headers.authorization) {
+    const [type, tokenFromHeader] = req.headers.authorization.split(' ');
+    if (type === 'Bearer' && tokenFromHeader) {
+      token = tokenFromHeader;
+    }
+  }
+  return token;
+};
+
+/**
  * JwtStrategy is responsible for validating the JWT token.
  * It extracts the token from the Authorization header (Bearer token),
  * verifies it using the secret, and returns the user payload.
@@ -23,9 +44,10 @@ export interface JwtPayload {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Extract token from 'Authorization: Bearer <token>'
+      jwtFromRequest: jwtExtractor, // Extract token from 'Authorization: Bearer <token>'
       ignoreExpiration: false, // Do not ignore token expiration
       secretOrKey: process.env.JWT_SECRET || 'dev-secret', // Use the same secret key as used for signing
+      passReqToCallback: true,
     });
   }
 
@@ -36,13 +58,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @returns The user object to be attached to the request (req.user).
    * @throws UnauthorizedException if the user is not found or invalid.
    */
-  async validate(payload: JwtPayload) {
+  async validate(req: Request, payload: JwtPayload) {
     // In a real application, you might fetch the user from a database here
     // to ensure they still exist and are active.
     // For this example, we just return the payload itself as the user.
     if (!payload.sub) {
       throw new UnauthorizedException('Invalid token payload');
     }
+    (req as any).tokenExtractedFrom = req.cookies && req.cookies['jwt'] ? 'cookie' : 'header';
     // The returned object will be attached to req.user
     return { userId: payload.sub, email: payload.email };
   }

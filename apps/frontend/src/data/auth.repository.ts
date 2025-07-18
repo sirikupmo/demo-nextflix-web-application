@@ -16,7 +16,9 @@ export class AuthRepository {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Client-Type': 'web',
       },
+      credentials: 'include',
       body: JSON.stringify(credentials),
     });
 
@@ -29,18 +31,39 @@ export class AuthRepository {
   }
 
   /**
+   * Sends a logout request to the backend to clear the JWT cookie.
+   * Includes 'credentials: include' to ensure the cookie is sent for clearing.
+   */
+  async logout(): Promise<void> {
+    const response = await fetch(`/api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Crucial for sending cookies to be cleared
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Logout API Error Response:', errorData);
+      throw new Error(errorData.message || 'Logout failed on backend');
+    }
+    console.log('Backend logout successful.');
+  }
+
+  /**
    * Fetches the authenticated user's details and profiles.
    * @param token - The JWT authentication token.
    * @returns The user details and profiles.
    * @throws An error if the API call fails or returns an error status.
    */
-  async getMe(token: string): Promise<MeResponseDto> {
+  async getMe(): Promise<MeResponseDto> {
     const response = await fetch(`/api/auth/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {

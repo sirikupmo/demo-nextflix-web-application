@@ -1,7 +1,7 @@
 // src/auth/auth.service.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository, User } from '../data/user.repository'; 
+import { UserRepository, User } from '../data/user.repository';
 import { ProfileService } from '../profile/profile.service';
 import { Profile } from '../data/profile.repository';
 /**
@@ -15,7 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
     private readonly profileService: ProfileService,
-  ) {}
+  ) { }
 
   /**
    * Validates user credentials against mock data.
@@ -41,13 +41,24 @@ export class AuthService {
    * @param user - The validated user object (without password).
    * @returns An object containing the access token and user details.
    */
-  async login(user: Omit<User, 'password'>) {
+  async login(user: Omit<User, 'password'>, isWebClient: boolean) {
     // The payload for the JWT token.
     // It's good practice to include minimal, non-sensitive user data here.
     const payload = { email: user.email, sub: user.id };
+    let expiresIn: string;
+    if (isWebClient) {
+      expiresIn = process.env.JWT_EXPIRATION_TIME_SHOPT_LIVED || '15m' // Short-lived token for cookie-based web clients
+    } else {
+      expiresIn = process.env.JWT_EXPIRATION_TIME_LONG_LIVED || '60m'; // Longer-lived token for API clients (e.g., Postman)
+    }
+
+    const access_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET || 'dev-secret',
+      expiresIn: expiresIn,
+    });
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: access_token,
       user: {
         id: user.id,
         email: user.email,

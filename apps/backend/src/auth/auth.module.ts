@@ -1,5 +1,5 @@
 // src/auth/auth.module.ts
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from '../data/user.repository';
 import { ProfileModule } from '../profile/profile.module';
+import { RefreshTokenMiddleware } from './refresh-token.middleware';
 /**
  * AuthModule encapsulates all authentication features.
  * Configures JwtModule, PassportModule, registers AuthController and AuthService,
@@ -21,17 +22,27 @@ import { ProfileModule } from '../profile/profile.module';
       imports: [ConfigModule], // Import ConfigModule to use ConfigService
       useFactory: async () => ({
         secret: process.env.JWT_SECRET || 'dev-secret',
-        signOptions: { expiresIn: '60m' }, // Token expiration time
       }),
       inject: [ConfigService], // Inject ConfigService into the factory
     }),
     ConfigModule,
-    // Use forwardRef to resolve circular dependency:
-    // AuthModule imports ProfileModule, and ProfileModule imports AuthModule (for JwtAuthGuard)
     forwardRef(() => ProfileModule),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, UserRepository],
   exports: [AuthService, JwtModule, PassportModule], // Export AuthService and JwtModule if other modules need them
 })
-export class AuthModule {}
+
+export class AuthModule {
+  // Apply RefreshTokenMiddleware to all authenticated routes
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RefreshTokenMiddleware)
+      .forRoutes(
+        { path: 'auth/me', method: RequestMethod.GET },
+        { path: 'movies/*path', method: RequestMethod.ALL }, // Apply to all movie routes
+        { path: 'profile/*path', method: RequestMethod.ALL }, // Apply to all profile routes
+        // Add other protected routes here
+      );
+  }
+}
