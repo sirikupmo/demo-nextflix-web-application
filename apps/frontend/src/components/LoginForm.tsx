@@ -2,7 +2,7 @@
 'use client'; // This directive is required for client-side components
 
 import React, { useState } from 'react';
-import { AuthService } from '@/domain/auth.service';
+import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import Link from 'next/link';
 export default function LoginForm() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const authService = new AuthService(); // Instantiate AuthService
+  const authService = authServiceInstance; // Instantiate AuthService
 
   // Get states and actions from Zustand store
   const { isLoading, error, isLoggedIn, user, setError } = useAuthStore();
@@ -107,9 +107,9 @@ export default function LoginForm() {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
-          <Link href="/register" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          {/* <Link href="/register" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
             Register?
-          </Link>
+          </Link> */}
         </div>
       </form>
     </div>

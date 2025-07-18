@@ -3,8 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
-import { AuthService } from '@/domain/auth.service';
 
 /**
  * Protected layout for routes that require authentication.
@@ -17,7 +17,7 @@ export default function ProtectedLayout({
 }) {
   const router = useRouter();
   const { isLoggedIn, isLoading, error } = useAuthStore();
-  const authService = new AuthService();
+  const authService = authServiceInstance;
 
   // New local state to track if the initial auth check has completed
   // This prevents the flicker by ensuring we wait for the first auth check
@@ -32,7 +32,6 @@ export default function ProtectedLayout({
     };
 
     // Only run this effect once on component mount
-    // Add authService to dependencies as it's used inside the effect
     if (!isInitialAuthCheckCompleted) { // Use this local state to ensure it only runs once
       performInitialAuthCheck();
     }
