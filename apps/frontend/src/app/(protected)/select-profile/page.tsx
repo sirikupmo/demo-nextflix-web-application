@@ -58,14 +58,15 @@ export default function SelectProfilePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             {profiles.map((profile) => (
               <div key={profile.id} className="bg-blue-50 p-4 rounded-lg shadow-sm flex items-center space-x-4">
-                <Image // Changed <img> to <Image>
+                {/* <Image // Changed <img> to <Image>
                   src={profile.avatarUrl}
                   alt={profile.name}
                   width={64} // Specify a width
                   height={64} // Specify a height
                   className="rounded-full object-cover"
                   onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x100/CCCCCC/000000?text=NA'; }} // Fallback for Image component
-                />
+                /> */}
+                <img src={profile.avatarUrl} alt={profile.name} className="w-16 h-16 rounded-full object-cover" onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x100/CCCCCC/000000?text=NA'; }}/>
                 <div>
                   <h3 className="text-lg font-medium text-gray-800">{profile.name}</h3>
                   <p className="text-sm text-gray-600">ID: {profile.id}</p>

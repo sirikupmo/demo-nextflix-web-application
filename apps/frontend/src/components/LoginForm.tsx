@@ -1,7 +1,7 @@
 // apps/frontend/src/components/LoginForm.tsx
 'use client'; // This directive is required for client-side components
 
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,7 @@ export default function LoginForm() {
 
   // Redirect if already logged in (this component should ideally not be rendered if already logged in,
   // but this is a fallback for immediate redirect after successful login within the same page)
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
       router.push('/'); // Redirect to home page or dashboard
     }
@@ -64,12 +64,12 @@ export default function LoginForm() {
       )}
 
       {/* Success State (briefly shown before redirect) */}
-      {isLoggedIn && user && (
+      {/* {isLoggedIn && user && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
           <strong className="font-bold">Success!</strong>
           <span className="block sm:inline"> Welcome, {user.email}! Redirecting...</span>
         </div>
-      )}
+      )} */}
 
       {/* Login Form */}
       <form onSubmit={handleSubmit}>
@@ -107,9 +107,9 @@ export default function LoginForm() {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
-          {/* <Link href="/register" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          <Link href="#" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
             Register?
-          </Link> */}
+          </Link>
         </div>
       </form>
     </div>
