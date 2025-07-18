@@ -8,7 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from '../data/user.repository';
 import { ProfileModule } from '../profile/profile.module';
-import { RefreshTokenMiddleware } from './refresh-token.middleware';
 /**
  * AuthModule encapsulates all authentication features.
  * Configures JwtModule, PassportModule, registers AuthController and AuthService,
@@ -33,16 +32,4 @@ import { RefreshTokenMiddleware } from './refresh-token.middleware';
   exports: [AuthService, JwtModule, PassportModule], // Export AuthService and JwtModule if other modules need them
 })
 
-export class AuthModule {
-  // Apply RefreshTokenMiddleware to all authenticated routes
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(RefreshTokenMiddleware)
-      .forRoutes(
-        { path: 'auth/me', method: RequestMethod.GET },
-        { path: 'movies/*path', method: RequestMethod.ALL }, // Apply to all movie routes
-        { path: 'profile/*path', method: RequestMethod.ALL }, // Apply to all profile routes
-        // Add other protected routes here
-      );
-  }
-}
+export class AuthModule { }

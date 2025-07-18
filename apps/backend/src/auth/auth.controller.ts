@@ -86,4 +86,16 @@ export class AuthController {
     const data = await this.authService.getMe(userId);
     return data;
   }
+
+  /**
+   * A lightweight authenticated endpoint for client-side "keep-alive" pings.
+   * Its primary purpose is to trigger the RefreshTokenMiddleware to refresh the JWT cookie.
+   * @returns A simple success message.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get('ping')
+  @HttpCode(HttpStatus.OK)
+  ping() {
+    return { message: 'Auth session active.' };
+  }
 }

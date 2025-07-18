@@ -1,11 +1,12 @@
 // apps/frontend/src/app/(protected)/select-profile/page.tsx
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { AuthService } from '@/domain/auth.service';
 import { useRouter } from 'next/navigation';
+import { useSessionKeepAlive } from '@/lib/useSessionKeepAlive';
 
 /**
  * Select Profile page.
@@ -14,9 +15,11 @@ import { useRouter } from 'next/navigation';
  */
 export default function SelectProfilePage() {
   // Access profiles through the user object
-  const { user } = useAuthStore(); // Only need to destructure `user` now
+  const { user, isLoggedIn } = useAuthStore(); // Only need to destructure `user` now
   const router = useRouter();
   const authService = new AuthService();
+  const [isUserActive, setIsUserActive] = useState(true);
+  useSessionKeepAlive(isLoggedIn && isUserActive);
 
   const handleLogout = async () => { // Made async to await backend logout
     await authService.logout(); // Call backend logout
@@ -43,6 +46,17 @@ export default function SelectProfilePage() {
         <h1 className="text-2xl font-bold text-center mb-6">Welcome, {user.email}!</h1>
         {/* Removed display of user.roles as it's no longer part of UserDto */}
         <h2 className="text-xl font-semibold mb-4">Your Profiles:</h2>
+
+        {/* Example of toggling activity for testing keep-alive */}
+        <div className="mb-4 text-center">
+          <button
+            onClick={() => setIsUserActive(!isUserActive)}
+            className={`px-4 py-2 rounded-md text-white ${isUserActive ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 hover:bg-gray-600'}`}
+          >
+            {isUserActive ? 'User Active (Pinging)' : 'User Inactive (No Pings)'}
+          </button>
+        </div>
+
 
         {/* Empty State for profiles */}
         {/* Check if profiles array exists and is empty */}

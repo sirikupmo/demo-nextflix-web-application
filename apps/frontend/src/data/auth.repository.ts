@@ -76,4 +76,15 @@ export class AuthRepository {
     // The backend returns { data: { user: ..., profiles: [...] }, message: ... }
     return result;
   }
+
+  async ping(): Promise<void> {
+    const response = await fetch(`api/auth/ping`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Ping failed with status: ${response.status}`);
+    }
+  }
 }

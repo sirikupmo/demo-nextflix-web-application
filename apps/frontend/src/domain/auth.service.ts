@@ -94,7 +94,7 @@ export class AuthService {
 
       // Set all authentication data (token, user, profiles) in one go
       setAuthData(meData.user, meData.profiles);
-      
+
     } catch (error: unknown) { // Changed to unknown
       // console.error('AuthService - initializeAuth error caught:', error);
       logout(); // Clear invalid token
@@ -103,6 +103,22 @@ export class AuthService {
     } finally {
       setLoading(false); // Clear loading state
       console.log('initializeAuth: Auth check finished.');
+    }
+  }
+
+  async keepSessionAlive(): Promise<void> {
+    try {
+      await this.authRepository.ping();
+    } catch (error: unknown) {
+      const errorMessage = (error as Error).message || 'An unknown error occurred.';
+      if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+        console.warn('AuthService - keepSessionAlive: Session expired during ping. Logging out.');
+        useAuthStore.getState().logout();
+        useAuthStore.getState().setError('Session expired due to inactivity.');
+      } else {
+        console.error('AuthService - keepSessionAlive unexpected error:', error);
+      }
+      throw error;
     }
   }
 }
