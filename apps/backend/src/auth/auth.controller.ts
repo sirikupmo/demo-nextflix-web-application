@@ -65,6 +65,7 @@ export class AuthController {
    * @returns A success message.
    */
   @UseGuards(JwtAuthGuard) // Ensure only authenticated users can logout
+  @UseInterceptors(RefreshTokenInterceptor)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@Res({ passthrough: true }) res: Response) {
