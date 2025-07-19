@@ -15,7 +15,7 @@ const PING_INTERVAL_MS = 10 * 60 * 1000; // Ping every 10 minutes (less than 15m
  */
 export const useSessionKeepAlive = (isActive: boolean) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { isLoggedIn, logout, setError } = useAuthStore();
+  const { isLoggedIn } = useAuthStore();
   const authService = authServiceInstance;
 
   useEffect(() => {
