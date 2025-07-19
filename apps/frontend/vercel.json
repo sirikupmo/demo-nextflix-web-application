@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://demo-nextflix-web-application.onrender.com/api/$1"
+    }
+  ]
+}

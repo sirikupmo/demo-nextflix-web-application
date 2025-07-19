@@ -72,14 +72,15 @@ export default function SelectProfilePage() {
               <div key={profile.id} className="bg-netflix-light-dark p-4 sm:p-6 rounded-lg shadow-sm flex flex-col items-center space-y-2 sm:space-y-4
                                           transform transition-all duration-200 ease-in-out hover:scale-105 cursor-pointer
                                           dark:bg-netflix-dark dark:text-netflix-dark-text dark:shadow-md"> {/* Responsive padding, flex direction, spacing, and Netflix theme colors */}
-                <Image
+                {/* <Image
                   src={profile.avatarUrl}
                   alt={profile.name}
                   width={80} // Increased size for better visibility
                   height={80}
                   className="rounded-full object-cover w-16 h-16 sm:w-20 sm:h-20" // Responsive image size
                   onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x100/CCCCCC/000000?text=NA'; }}
-                />
+                /> */}
+                <img src={profile.avatarUrl} alt={profile.name} className="w-16 h-16 rounded-full object-cover" onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x100/CCCCCC/000000?text=NA'; }} />
                 <div className="text-center">
                   <h3 className="text-lg sm:text-xl font-medium text-netflix-light-text dark:text-netflix-dark-text">{profile.name}</h3> {/* Responsive font size */}
                   <p className="text-sm sm:text-base text-netflix-light-secondary dark:text-netflix-dark-secondary">ID: {profile.id}</p> {/* Responsive font size */}
