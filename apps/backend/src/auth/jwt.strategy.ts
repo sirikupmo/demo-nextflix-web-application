@@ -1,7 +1,7 @@
 // src/auth/jwt.strategy.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Strategy } from 'passport-jwt';
 import { Request } from 'express';
 /**
  * Interface for the JWT payload.
@@ -22,14 +22,18 @@ export interface JwtPayload {
 const jwtExtractor = (req: Request): string | null => {
   let token = null;
   // 1. Try to get token from cookie
-  if (req && req.cookies) {
+  if (req && req.cookies && req.cookies['jwt']) {
     token = req.cookies['jwt']; // 'jwt' is the name of our cookie
+    (req as any).tokenExtractedFrom = 'cookie';
+    console.log('JWT extracted from cookie:', token, new Date().toLocaleTimeString());
   }
   // 2. If not found in cookie, try Authorization header (Bearer token)
   if (!token && req && req.headers.authorization) {
     const [type, tokenFromHeader] = req.headers.authorization.split(' ');
     if (type === 'Bearer' && tokenFromHeader) {
       token = tokenFromHeader;
+      (req as any).tokenExtractedFrom = 'header';
+      console.log('JWT extracted from Authorization header:', token, new Date().toLocaleTimeString());
     }
   }
   return token;
@@ -45,7 +49,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: jwtExtractor, // Extract token from 'Authorization: Bearer <token>'
-      ignoreExpiration: false, // Do not ignore token expiration
+      ignoreExpiration: true, // Do not ignore token expiration
       secretOrKey: process.env.JWT_SECRET || 'dev-secret', // Use the same secret key as used for signing
       passReqToCallback: true,
     });
@@ -61,12 +65,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: JwtPayload) {
     // In a real application, you might fetch the user from a database here
     // to ensure they still exist and are active.
-    // For this example, we just return the payload itself as the user.
+    const tokenExtractedFrom = (req as any).tokenExtractedFrom;
+    const now = Date.now() / 1000; // Current time in seconds
+    const isExpired = payload.exp && payload.exp < now;
+    if (isExpired) {
+      if (tokenExtractedFrom === 'header') {
+        // If it's a header token and it's expired, it's truly unauthorized.
+        // This enforces the 60m expiry for API clients.
+        throw new UnauthorizedException('Token expired for API client.');
+      }
+      // If it's a cookie token and it's expired, we allow it to pass through
+      // so RefreshTokenInterceptor can re-issue a new one (sliding session).
+      // We still need to return the user data for the interceptor to use.
+      // console.log('JwtStrategy - Expired cookie token allowed for refresh.'); // For debugging
+    }
     if (!payload.sub) {
       throw new UnauthorizedException('Invalid token payload');
     }
-    (req as any).tokenExtractedFrom = req.cookies && req.cookies['jwt'] ? 'cookie' : 'header';
     // The returned object will be attached to req.user
-    return { userId: payload.sub, email: payload.email };
+    return { userId: payload.sub, email: payload.email, tokenExtractedFrom: tokenExtractedFrom };
   }
 }

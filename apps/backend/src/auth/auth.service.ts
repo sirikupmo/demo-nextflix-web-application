@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserRepository, User } from '../data/user.repository';
 import { ProfileService } from '../profile/profile.service';
 import { Profile } from '../data/profile.repository';
+import { JwtPayload } from './jwt.strategy';
 /**
  * Service responsible for user authentication and JWT token generation.
  * Simulates user data storage and validation.
@@ -44,7 +45,7 @@ export class AuthService {
   async login(user: Omit<User, 'password'>, isWebClient: boolean) {
     // The payload for the JWT token.
     // It's good practice to include minimal, non-sensitive user data here.
-    const payload = { email: user.email, sub: user.id };
+    const payload: JwtPayload = { email: user.email, sub: user.id };
     let expiresIn: string;
     if (isWebClient) {
       expiresIn = process.env.JWT_EXPIRATION_TIME_SHOPT_LIVED || '15m' // Short-lived token for cookie-based web clients

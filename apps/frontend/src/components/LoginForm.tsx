@@ -24,7 +24,7 @@ export default function LoginForm() {
   // but this is a fallback for immediate redirect after successful login within the same page)
   useEffect(() => {
     if (isLoggedIn) {
-      router.push('/'); // Redirect to home page or dashboard
+      router.push('/select-profile'); // Redirect to home page or dashboard
     }
   }, [isLoggedIn, router]);
 

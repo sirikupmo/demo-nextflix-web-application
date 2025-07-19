@@ -1,5 +1,5 @@
 // src/auth/auth.module.ts
-import { Module, MiddlewareConsumer, RequestMethod, forwardRef } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod, forwardRef, NestModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from '../data/user.repository';
 import { ProfileModule } from '../profile/profile.module';
+import { RefreshTokenInterceptor } from './refresh-token.interceptor';
 /**
  * AuthModule encapsulates all authentication features.
  * Configures JwtModule, PassportModule, registers AuthController and AuthService,
@@ -28,8 +29,13 @@ import { ProfileModule } from '../profile/profile.module';
     forwardRef(() => ProfileModule),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, UserRepository],
+  providers: [AuthService, JwtStrategy, UserRepository, RefreshTokenInterceptor],
   exports: [AuthService, JwtModule, PassportModule], // Export AuthService and JwtModule if other modules need them
 })
 
-export class AuthModule { }
+export class AuthModule implements NestModule {
+  // Remove middleware configuration, as Interceptors are applied via @UseInterceptors()
+  configure(consumer: MiddlewareConsumer) {
+    // This method can be used for other middleware if needed, but RefreshTokenInterceptor is not applied here.
+  }
+}

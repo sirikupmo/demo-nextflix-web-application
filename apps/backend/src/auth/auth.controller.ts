@@ -1,9 +1,10 @@
 // src/auth/auth.controller.ts
-import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards, Request, Res, UsePipes, ValidationPipe, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards, Request, Res, UsePipes, ValidationPipe, UnauthorizedException, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Response } from 'express';
+import { RefreshTokenInterceptor } from './refresh-token.interceptor';
 /**
  * Controller for authentication-related endpoints.
  * Handles the 'auth/login' API route.
@@ -39,17 +40,20 @@ export class AuthController {
     const { access_token, user: userData } = await this.authService.login(user, isWebClient);
     
     if (isWebClient) {
+      console.log('AuthController - Web client detected, setting JWT as HttpOnly cookie.');
       // Set JWT as an HttpOnly cookie for web clients
       res.cookie('jwt', access_token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Use secure in production (HTTPS)
-        maxAge: process.env.COOKIE_MAX_AGE ? parseInt(process.env.COOKIE_MAX_AGE) : 60 * 60 * 1000, 
+        maxAge: process.env.COOKIE_MAX_AGE_MIN ? parseInt(process.env.COOKIE_MAX_AGE_MIN) * 60 * 1000 : 60 * 60 * 1000, 
         sameSite: 'lax', // Protect against CSRF
+        path: '/', 
       });
       // For web clients, we don't return the token in the body, just a success message
       return { user: userData };
     } else {
       // For other clients (e.g., mobile apps), return the token in the body
+      console.log('AuthController - Non-web client detected, returning JWT in response body.');
       return { access_token, user: userData };
     }
   }
@@ -68,6 +72,7 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      path: '/', 
     });
     return { message: 'Logout successful, JWT cookie cleared.' };
   }
@@ -79,6 +84,7 @@ export class AuthController {
    * @returns An object containing the user's details and their profiles.
    */
   @UseGuards(JwtAuthGuard) // Protect this endpoint with JWT authentication
+  @UseInterceptors(RefreshTokenInterceptor) 
   @Get('me')
   async getMe(@Request() req: any) {
     // req.user contains the payload returned by JwtStrategy.validate()
@@ -93,9 +99,11 @@ export class AuthController {
    * @returns A simple success message.
    */
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(RefreshTokenInterceptor) 
   @Get('ping')
   @HttpCode(HttpStatus.OK)
   ping() {
+    console.log('AuthController - Ping endpoint hit, session is active.');
     return { message: 'Auth session active.' };
   }
 }

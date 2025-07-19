@@ -18,7 +18,7 @@ export default function SelectProfilePage() {
   const { user, isLoggedIn } = useAuthStore(); // Only need to destructure `user` now
   const router = useRouter();
   const authService = new AuthService();
-  const [isUserActive, setIsUserActive] = useState(true);
+  const [isUserActive, setIsUserActive] = useState(false);
   useSessionKeepAlive(isLoggedIn && isUserActive);
 
   const handleLogout = async () => { // Made async to await backend logout

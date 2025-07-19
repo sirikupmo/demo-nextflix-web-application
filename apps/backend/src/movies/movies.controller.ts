@@ -1,9 +1,11 @@
 // src/movies/movies.controller.ts
-import { Controller, Get, Param, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards, Request, UseInterceptors } from '@nestjs/common';
 import { MoviesService } from './movies.service'; // This is from the Domain Layer
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RefreshTokenInterceptor } from '../auth/refresh-token.interceptor';
 
 @UseGuards(JwtAuthGuard) 
+@UseInterceptors(RefreshTokenInterceptor)
 @Controller('movies')
 export class MoviesController {
     constructor(private readonly moviesService: MoviesService) { }

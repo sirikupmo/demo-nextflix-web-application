@@ -78,7 +78,7 @@ export class AuthRepository {
   }
 
   async ping(): Promise<void> {
-    const response = await fetch(`api/auth/ping`, {
+    const response = await fetch(`/api/auth/ping`, {
       method: 'GET',
       credentials: 'include',
     });

@@ -1,13 +1,14 @@
 // src/profile/profile.controller.ts
-import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Request, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Import JwtAuthGuard
-
+import { RefreshTokenInterceptor } from '../auth/refresh-token.interceptor';
 /**
  * Controller for profile-related API endpoints.
  * Only GET routes are available and are protected by JWT authentication.
  */
 @UseGuards(JwtAuthGuard) // Protect all routes in this controller
+@UseInterceptors(RefreshTokenInterceptor)
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
