@@ -7,7 +7,7 @@ import LoginForm from '@/components/LoginForm';
  */
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-netflix-light dark:bg-netflix-dark"> {/* Updated background color */}
       <LoginForm />
     </div>
   );
