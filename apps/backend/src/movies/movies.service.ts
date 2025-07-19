@@ -6,11 +6,11 @@ import { MovieApiRepository } from '../data/movies.repository'; // This is from 
 export class MoviesService {
     constructor(private readonly MovieApiRepository: MovieApiRepository) { }
 
-    async searchAll(query: string, page: number, user?: any): Promise<any | null> {
+    async searchAll(query: string, page: number, language: string, user?: any): Promise<any | null> {
         if (user) {
             console.log(`User searching movies: ${user.email} (ID: ${user.userId})`);
         }
-        const apiResponse = await this.MovieApiRepository.searchAll(query, page);
+        const apiResponse = await this.MovieApiRepository.searchAll(query, page, language);
         return apiResponse;
     }
 

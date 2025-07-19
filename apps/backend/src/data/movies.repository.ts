@@ -9,8 +9,8 @@ export class MovieApiRepository {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async searchAll(query: string, page: number = 1): Promise<any> {
-    const url = `${this.API_BASE_URL}/search/keyword`;
+  async searchAll(query: string, page: number = 1, language: string = 'th-TH'): Promise<any> {
+    const url = `${this.API_BASE_URL}/search/movie`;
     
     try {
       const response = await firstValueFrom(
@@ -18,6 +18,7 @@ export class MovieApiRepository {
           params: {
             query,
             page,
+            language,
           },
           headers: {
             accept: 'application/json',
@@ -33,7 +34,7 @@ export class MovieApiRepository {
     }
   }
 
-  async fetchPopularMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+  async fetchPopularMovies(page: number = 1, language: string = 'th-TH'): Promise<any> {
     const url = `${this.API_BASE_URL}/movie/popular`;
     
     try {
@@ -58,7 +59,7 @@ export class MovieApiRepository {
     }
   }
 
-  async fetchTopRatedMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+  async fetchTopRatedMovies(page: number = 1, language: string = 'th-TH'): Promise<any> {
     const url = `${this.API_BASE_URL}/movie/top_rated`;
     
     try {
@@ -83,7 +84,7 @@ export class MovieApiRepository {
     }
   }
 
-  async fetchUpcomingMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+  async fetchUpcomingMovies(page: number = 1, language: string = 'th-TH'): Promise<any> {
     const url = `${this.API_BASE_URL}/movie/upcoming`;
     
     try {
@@ -108,7 +109,7 @@ export class MovieApiRepository {
     }
   }
 
-  async fetchNowPlayingMovies(page: number = 1, language: string = 'en-US'): Promise<any> {
+  async fetchNowPlayingMovies(page: number = 1, language: string = 'th-TH'): Promise<any> {
     const url = `${this.API_BASE_URL}/movie/now_playing`;
     
     try {

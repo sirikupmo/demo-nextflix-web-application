@@ -11,12 +11,12 @@ export class MoviesController {
     constructor(private readonly moviesService: MoviesService) { }
 
     @Get('search')
-    async searchAll(@Query('query') query: string, @Query('page') page: number = 1, @Request() req: any) {
+    async searchAll(@Query('query') query: string, @Query('page') page: number = 1, @Query('language') language: string = 'th-TH', @Request() req: any) {
         if (!query) {
             return [];
         }
         console.log('User searching movies:', req.user);
-        const movies = await this.moviesService.searchAll(query, page, req.user);
+        const movies = await this.moviesService.searchAll(query, page, language, req.user);
         return movies;
     }
 
