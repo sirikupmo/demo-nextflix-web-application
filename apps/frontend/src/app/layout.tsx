@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Kanit } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from 'next-themes'; 
+import ThemeToggle from '@/components/ThemeToggle';
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -30,11 +32,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${fontVars} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${fontVars} bg-netflix-light dark:bg-netflix-dark text-netflix-light-text dark:text-netflix-dark-text min-h-screen flex flex-col`} >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="relative min-h-screen">
+            <div className="absolute top-4 right-4 z-50 p-2 sm:p-4">
+            <ThemeToggle />
+          </div>
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
