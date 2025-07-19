@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { AuthService } from '@/domain/auth.service';
 import { useRouter } from 'next/navigation';
