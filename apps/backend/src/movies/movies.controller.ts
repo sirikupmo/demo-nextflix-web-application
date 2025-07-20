@@ -47,4 +47,11 @@ export class MoviesController {
         const movies = await this.moviesService.getNowPlayingMovies(page, language, req.user);
         return movies;
     }
+
+    @Get(':id')
+    async getMovieDetails(@Param('id') id: number, @Query('language') language: string = 'th-TH', @Request() req: any) {
+        console.log('User accessing movie details:', req.user);
+        const movie = await this.moviesService.getMovieDetails(id, language, req.user);
+        return movie;
+    }
 }

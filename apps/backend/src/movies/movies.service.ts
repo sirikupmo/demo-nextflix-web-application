@@ -45,4 +45,15 @@ export class MoviesService {
         const apiResponse = await this.MovieApiRepository.fetchNowPlayingMovies(page, language);
         return apiResponse;
     }
+
+    async getMovieDetails(movieId: number, language: string, user?: any): Promise<any | null> {
+        if (user) {
+            console.log(`Fetching details for movie ID: ${movieId} for user: ${user.email} (ID: ${user.userId})`);
+        }
+        const apiResponse = await this.MovieApiRepository.fetchMovieDetails(movieId, language);
+        if (!apiResponse) {
+            throw new NotFoundException(`Movie with ID ${movieId} not found`);
+        }
+        return apiResponse;
+    }
 }

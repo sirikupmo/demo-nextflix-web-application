@@ -133,4 +133,28 @@ export class MovieApiRepository {
       throw new Error('Failed to fetch now playing movies');
     }
   }
+
+  async fetchMovieDetails(movieId: number, language: string = 'th-TH'): Promise<any> {
+    const url = `${this.API_BASE_URL}/movie/${movieId}`;
+    
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          params: {
+            language,
+          },
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${this.API_ACCESS_TOKEN}`,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error(`Error fetching details for movie ID ${movieId}:`, error);
+      throw new Error(`Failed to fetch movie details for ID ${movieId}`);
+    }
+  }
 }
