@@ -2,10 +2,10 @@
 'use client'; // This directive is required for client-side components
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 /**
  * LoginForm component.
  * Handles user input, displays loading/error states, and redirects on success.
@@ -20,7 +20,7 @@ export default function LoginForm() {
 
   const authService = authServiceInstance;
 
-  const { isLoading, error, isLoggedIn, user, setError } = useAuthStore();
+  const { isLoading, error, isLoggedIn, setError } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -47,78 +47,66 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8 bg-netflix-light dark:bg-netflix-dark"> {/* Responsive padding */}
-      <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg p-6 sm:p-8 rounded-lg shadow-xl
-                  transform transition-all duration-300 ease-in-out scale-95 opacity-0 animate-fade-in-scale
-                  bg-netflix-light-dark text-netflix-light-text dark:bg-netflix-dark-light dark:text-netflix-dark-text"> {/* Responsive max-width, padding, and Netflix theme colors */}
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 text-netflix-light-text dark:text-netflix-dark-text">Login to Nextflix</h1> {/* Responsive font size */}
+    <div className="rounded-md px-4 py-8 sm:px-10 md:px-14 lg:px-16 w-full mx-auto bg-netflix-light/10 dark:bg-netflix-dark/10 backdrop-blur-sm shadow-xl">
+      {/* Logo */}
+      <div className="mb-6 sm:mb-8 flex justify-center">
+        <Image
+          src="/logo-netflix.svg"
+          width={40}
+          height={20}
+          alt="Logo"
+          priority
+          className="w-8 sm:w-10 md:w-12"
+        />
+      </div>
 
-        {isLoading && (
-          <div className="text-center text-blue-500 mb-4">
-            <p>Loading...</p>
-          </div>
-        )}
+      {/* Form */}
+      <form className="flex flex-col gap-3 sm:gap-4" onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Enter email"
+          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Enter password"
+          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4
-                          dark:bg-red-900 dark:border-red-700 dark:text-red-300">
-            <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline"> {error}</span>
-          </div>
-        )}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`bg-[#E50914] text-white py-2 sm:py-2.5 md:py-3 rounded mt-2 font-semibold text-sm sm:text-base md:text-lg transition ${isLoading
+            ? "bg-[#8A0B12] cursor-not-allowed opacity-90"
+            : "hover:brightness-110 hover:scale-[1.02]"
+            }`}
+        >
+          {isLoading ? 'Signing in...' : 'Sign In'}
+        </button>
+      </form>
 
-        {isLoggedIn && user && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4
-                          dark:bg-green-900 dark:border-green-700 dark:text-green-300">
-            <strong className="font-bold">Success!</strong>
-            <span className="block sm:inline"> Welcome, {user.email}! Redirecting...</span>
-          </div>
-        )}
+      {/* Error */}
+      {error && (
+        <p className="text-red-400 text-xs sm:text-sm text-center mt-3 sm:mt-4">
+          {error}
+        </p>
+      )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm sm:text-base font-bold mb-2 text-netflix-light-text dark:text-netflix-dark-text">
-              Email:
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-netflix-light-text leading-tight focus:outline-none focus:shadow-outline
-                         bg-white dark:bg-gray-700 border-netflix-light-border dark:border-netflix-dark-border dark:text-netflix-dark-text" // Netflix theme for inputs
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm sm:text-base font-bold mb-2 text-netflix-light-text dark:text-netflix-dark-text">
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-netflix-light-text mb-3 leading-tight focus:outline-none focus:shadow-outline
-                         bg-white dark:bg-gray-700 border-netflix-light-border dark:border-netflix-dark-border dark:text-netflix-dark-text" // Netflix theme for inputs
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4"> {/* Responsive flex */}
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-netflix-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50
-                         transition-all duration-200 ease-in-out hover:scale-105" // Netflix red button
-              disabled={isLoading}
-            >
-              {isLoading ? 'Logging in...' : 'Login'}
-            </button>
-            <Link href="/register" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800
-                                            transition-all duration-200 ease-in-out hover:scale-105 dark:text-blue-400 dark:hover:text-blue-600">
-              Register?
-            </Link>
-          </div>
-        </form>
+      <div className="flex justify-end text-xs font-bold mt-3 sm:mt-4">
+        <a href="#" className="hover:underline">
+          Forgot password?
+        </a>
+      </div>
+
+      <div className="mt-10 sm:mt-12 text-center text-xs sm:text-sm md:text-sm font-bold">
+        Don&rsquo;t have an account?
+        <a href="#" className="pl-1 sm:pl-2 text-[#B81D24] hover:underline">
+          Create one
+        </a>
       </div>
     </div>
   );

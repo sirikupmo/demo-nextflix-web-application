@@ -60,9 +60,6 @@ export class AuthRepository {
   async getMe(): Promise<MeResponseDto> {
     const response = await fetch(`/api/auth/me`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
     });
 

@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { authServiceInstance } from './authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
 
-const PING_INTERVAL_MS = 10 * 60 * 1000; // Ping every 10 minutes (less than 15m JWT expiry)
+const PING_INTERVAL_MS = process.env.PING_INTERVAL_MIN ? parseInt(process.env.PING_INTERVAL_MIN) * 60 * 1000 : 10 * 60 * 1000; // Ping every 10 minutes (less than 15m JWT expiry)
 
 /**
  * Custom hook to periodically send a "keep-alive" ping to the backend
