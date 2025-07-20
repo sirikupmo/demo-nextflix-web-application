@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Movie, MovieDetails } from '@/domain/dtos/movie.dto';
-import { X } from 'lucide-react';
+import { X, Star } from 'lucide-react';
 import Image from 'next/image';
 import { movieServiceInstance } from '@/lib/movieServiceInstance';
 
@@ -44,15 +44,14 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
 
     return (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="relative bg-zinc-900 text-white rounded-lg overflow-hidden w-full max-w-3xl shadow-xl">
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 z-10 text-white hover:text-red-500"
-                    title="Close modal"
-                >
-                    <X size={28} />
-                </button>
-
+            <button
+                onClick={onClose}
+                className="absolute top-0 right-0 mt-2 mr-2 z-50 text-white hover:text-red-500"
+                title="Close modal"
+            >
+                <X size={28} />
+            </button>
+            <div className="relative bg-zinc-900 text-white rounded-lg overflow-hidden w-full max-w-3xl max-h-[90vh] shadow-xl overflow-y-auto custom-scrollbar">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-24">
                         <span className="text-lg">Loading movie details...</span>
@@ -85,11 +84,10 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                                     <strong className="text-white">ประเภท:</strong>{' '}
                                     {detailsMovie?.genres.map((g) => g.name).join(', ')}
                                 </div>
-                                <div>
-                                    <strong className="text-white">คะแนนเฉลี่ย:</strong> ⭐ {detailsMovie?.vote_average.toFixed(1)} ({detailsMovie?.vote_count.toLocaleString()} โหวต)
-                                </div>
-                                <div>
-                                    <strong className="text-white">สถานะ:</strong> {detailsMovie?.status}
+                                <div className="flex items-center gap-1">
+                                    <strong className="text-white">คะแนนเฉลี่ย:</strong>
+                                    <Star className="w-4 h-4 text-yellow-400" fill="currentColor" />
+                                    <span>{detailsMovie?.vote_average.toFixed(1)} ({detailsMovie?.vote_count.toLocaleString()} โหวต)</span>
                                 </div>
                                 <div>
                                     <strong className="text-white">ภาษาต้นฉบับ:</strong> {detailsMovie?.original_language.toUpperCase()}

@@ -42,7 +42,7 @@ export default function NowPlayingCarousel({ movies }: NowPlayingCarouselProps) 
     const isLargeScreen = useIsLargeScreen(640);
 
     return (
-        <div className="rounded-lg overflow-hidden relative inline-block max-w-[800px] w-full">
+        <div className="overflow-hidden relative inline-block max-w-[800px] w-full">
             <Slider {...settings}>
                 {movies.slice(0, 5).map((movie) => {
                     const imageUrl =
@@ -56,14 +56,14 @@ export default function NowPlayingCarousel({ movies }: NowPlayingCarouselProps) 
                         ? "https://placehold.co/400x225/CCCCCC/000000?text=No+Image"
                         : "https://placehold.co/200x300/CCCCCC/000000?text=No+Poster";
                     return (
-                        <div key={movie.id} className={`relative rounded-md overflow-hidden ${isLargeScreen ? "w-[800px] h-[450px]" : "w-full aspect-[2/3]"}`}>
+                        <div key={movie.id} className={`relative overflow-hidden ${isLargeScreen ? "w-[800px] h-[450px]" : "w-full aspect-[2/3]"}`}>
                             {imageUrl ? (
                                 <Image
                                     src={imageUrl}
                                     alt={movie.original_title}
                                     fill
                                     sizes={isLargeScreen ? "800px" : "100vw"}
-                                    className="object-cover rounded-md"
+                                    className="object-cover"
                                     onError={(e) => {
                                         e.currentTarget.src = fallbackUrl;
                                     }}
@@ -74,7 +74,7 @@ export default function NowPlayingCarousel({ movies }: NowPlayingCarouselProps) 
                                     alt="No image available"
                                     fill
                                     sizes={isLargeScreen ? "800px" : "100vw"}
-                                    className="object-cover rounded-md"
+                                    className="object-cover"
                                 />
                             )}
 

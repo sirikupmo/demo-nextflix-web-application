@@ -23,12 +23,7 @@ export class RefreshTokenInterceptor implements NestInterceptor {
     const req = context.switchToHttp().getRequest<Request>();
     const res = context.switchToHttp().getResponse<Response>();
 
-    // Check if the request was authenticated and the token came from a cookie
-    // (req as any).user is set by JwtStrategy
-    // (req as any).tokenExtractedFrom is set by JwtStrategy
     if ((req as any).user && (req as any).tokenExtractedFrom === 'cookie') {
-      console.log('Old Req Cookie: ', req.cookies)
-      console.log('RefreshTokenInterceptor - Valid JWT cookie found, refreshing token.', new Date().toLocaleTimeString());
       return next.handle().pipe(
         tap(() => {
           const userPayload: JwtPayload = {
@@ -36,15 +31,11 @@ export class RefreshTokenInterceptor implements NestInterceptor {
             sub: (req as any).user.userId,
           };
 
-          // Re-sign the token with a short expiration (e.g., 15 minutes)
-          // This internal JWT expiration is for security, the cookie maxAge controls the session length.
           const newToken = this.jwtService.sign(userPayload, {
             secret: process.env.JWT_SECRET || 'dev-secret',
             expiresIn: process.env.JWT_EXPIRATION_TIME_SHOPT_LIVED || '15m', // Internal JWT expiration (e.g., 15 minutes)
           });
 
-          // Set the new token as an HttpOnly cookie
-          // maxAge is 1 hour (60 minutes) to implement the inactivity timeout.
           res.cookie('jwt', newToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Use secure in production (HTTPS)
@@ -56,7 +47,6 @@ export class RefreshTokenInterceptor implements NestInterceptor {
         }),
       );
     } else {
-      // If not from cookie or not authenticated, just pass through
       return next.handle();
     }
   }

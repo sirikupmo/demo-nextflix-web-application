@@ -46,13 +46,12 @@ export default function MovieCard({ movie, onClick }: MovieCardProps) {
             onClick={() => onClick?.(movie)}
             className="relative group cursor-pointer rounded-md overflow-hidden shadow-md
                transform transition-all duration-300 ease-in-out hover:scale-105
-               bg-netflix-dark-light dark:bg-netflix-dark-light
                flex-shrink-0 w-28 sm:w-32 md:w-40 lg:w-48"
         >
             {imageUrl ? (
                 <Image
                     src={imageUrl}
-                    alt={movie.original_title}
+                    alt={movie.title}
                     width={isLargeScreen ? 600 : 200}
                     height={isLargeScreen ? 338 : 300}
                     className="w-full h-auto object-cover rounded-md group-hover:opacity-80 transition-opacity duration-300"
@@ -75,9 +74,9 @@ export default function MovieCard({ movie, onClick }: MovieCardProps) {
                  opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             >
                 <h3 className="text-sm sm:text-base font-semibold truncate">
-                    {movie.original_title}
+                    {movie.title}
                 </h3>
-                <p className="text-xs text-netflix-dark-secondary">
+                <p className="text-xs">
                     {movie.release_date}
                 </p>
             </div>

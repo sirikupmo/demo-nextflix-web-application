@@ -37,11 +37,10 @@ export class AuthController {
 
     // Check if the client is a web application based on a custom header
     const isWebClient = req.headers['x-client-type'] === 'web';
-    const { access_token, user: userData } = await this.authService.login(user, isWebClient);
+    const { access_token, user: userData, expires_at } = await this.authService.login(user, isWebClient);
     
     if (isWebClient) {
       console.log('AuthController - Web client detected, setting JWT as HttpOnly cookie.');
-      // Set JWT as an HttpOnly cookie for web clients
       res.cookie('jwt', access_token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Use secure in production (HTTPS)
@@ -49,12 +48,10 @@ export class AuthController {
         sameSite: 'lax', // Protect against CSRF
         path: '/', 
       });
-      // For web clients, we don't return the token in the body, just a success message
       return { user: userData };
     } else {
-      // For other clients (e.g., mobile apps), return the token in the body
       console.log('AuthController - Non-web client detected, returning JWT in response body.');
-      return { access_token, user: userData };
+      return { access_token, expires_at, user: userData };
     }
   }
 

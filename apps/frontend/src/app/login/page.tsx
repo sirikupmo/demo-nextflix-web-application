@@ -7,7 +7,7 @@ import Image from 'next/image';
  */
 export default function LoginPage() {
   return (
-    <main className="flex items-center justify-center min-h-screen bg-netflix-light dark:bg-netflix-dark">
+    <main className="flex items-center justify-center min-h-screen">
       <Image
         src="/bg-netflix.jpg"
         alt="background"

@@ -48,7 +48,6 @@ export class AuthRepository {
       console.error('Logout API Error Response:', errorData);
       throw new Error(errorData.message || 'Logout failed on backend');
     }
-    console.log('Backend logout successful.');
   }
 
   /**
@@ -69,8 +68,6 @@ export class AuthRepository {
     }
 
     const result = await response.json();
-    console.log('AuthRepository - getMe API Response:', result);
-    // The backend returns { data: { user: ..., profiles: [...] }, message: ... }
     return result;
   }
 

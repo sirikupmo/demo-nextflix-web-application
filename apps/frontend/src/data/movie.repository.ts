@@ -13,7 +13,6 @@ export class MovieRepository {
         }
 
         const result = await response.json();
-        console.log('MovieRepository - popular API Response:', result);
         return result.results;
     }
 
@@ -29,7 +28,6 @@ export class MovieRepository {
         }
 
         const result = await response.json();
-        console.log('MovieRepository - topRated API Response:', result);
         return result.results;
     }
 
@@ -45,7 +43,6 @@ export class MovieRepository {
         }
 
         const result = await response.json();
-        console.log('MovieRepository - upcoming API Response:', result);
         return result.results;
     }
 
@@ -59,7 +56,6 @@ export class MovieRepository {
             throw new Error(errorData.message || 'Failed to fetch now playing movies');
         }
         const result = await response.json();
-        console.log('MovieRepository - nowPlaying API Response:', result);
         return result.results;
     }
 
@@ -75,7 +71,6 @@ export class MovieRepository {
         }
 
         const result = await response.json();
-        console.log('MovieRepository - search API Response:', result);
         return result.results;
     }
 
@@ -91,7 +86,6 @@ export class MovieRepository {
         }
 
         const result = await response.json();
-        console.log('MovieRepository - details API Response:', result);
         return result;
     }
 }

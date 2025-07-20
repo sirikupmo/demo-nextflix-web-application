@@ -63,26 +63,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @throws UnauthorizedException if the user is not found or invalid.
    */
   async validate(req: Request, payload: JwtPayload) {
-    // In a real application, you might fetch the user from a database here
-    // to ensure they still exist and are active.
     const tokenExtractedFrom = (req as any).tokenExtractedFrom;
     const now = Date.now() / 1000; // Current time in seconds
     const isExpired = payload.exp && payload.exp < now;
     if (isExpired) {
       if (tokenExtractedFrom === 'header') {
-        // If it's a header token and it's expired, it's truly unauthorized.
-        // This enforces the 60m expiry for API clients.
         throw new UnauthorizedException('Token expired for API client.');
       }
-      // If it's a cookie token and it's expired, we allow it to pass through
-      // so RefreshTokenInterceptor can re-issue a new one (sliding session).
-      // We still need to return the user data for the interceptor to use.
-      // console.log('JwtStrategy - Expired cookie token allowed for refresh.'); // For debugging
     }
     if (!payload.sub) {
       throw new UnauthorizedException('Invalid token payload');
     }
-    // The returned object will be attached to req.user
     return { userId: payload.sub, email: payload.email, tokenExtractedFrom: tokenExtractedFrom };
   }
 }

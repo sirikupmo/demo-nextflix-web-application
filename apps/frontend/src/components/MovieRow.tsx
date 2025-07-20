@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import MovieCard from './MovieCard'; // ปรับ path ให้ตรงกับโปรเจกต์ของคุณ
+import MovieCard from './MovieCard'; 
 import { Movie } from '@/domain/dtos/movie.dto';
-import MovieDetailModal from './MovieDetailModal'; // ปรับ path ให้ตรงกับโปรเจกต์ของคุณ
+import MovieDetailModal from './MovieDetailModal'; 
 interface MovieRowProps {
     title: string;
     movies: Movie[];
@@ -61,11 +61,10 @@ const MovieRow: React.FC<MovieRowProps> = ({ title, movies }) => {
                 <div
                     ref={scrollRef}
                     className="flex overflow-x-auto snap-x snap-mandatory
-                space-x-4 sm:space-x-6 lg:space-x-8
-                scrollbar-hide custom-scrollbar scroll-smooth"
+                space-x-4 sm:space-x-6 lg:space-x-8 custom-scrollbar scroll-smooth"
                 >
                     {loopedMovies.map((movie, index) => (
-                        <MovieCard key={`${movie.id}-${index}`} movie={movie} onClick={(movie) => setSelectedMovie(movie)} />
+                        <MovieCard key={`${movie.id}-${index}`} movie={movie} onClick={() => setSelectedMovie(movie)} />
                     ))}
                 </div>
             </div>

@@ -40,14 +40,14 @@ export default function LoginForm() {
 
   if (isLoggedIn) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-netflix-light dark:bg-netflix-dark">
-        <p className="text-lg text-netflix-light-text dark:text-netflix-dark-text">Redirecting to dashboard...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">Redirecting to dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-md px-4 py-8 sm:px-10 md:px-14 lg:px-16 w-full mx-auto bg-netflix-light/10 dark:bg-netflix-dark/10 backdrop-blur-sm shadow-xl">
+    <div className="rounded-md px-4 py-8 sm:px-10 md:px-14 lg:px-16 w-full mx-auto backdrop-blur-sm shadow-xl">
       {/* Logo */}
       <div className="mb-6 sm:mb-8 flex justify-center">
         <Image

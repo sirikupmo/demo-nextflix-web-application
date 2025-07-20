@@ -36,8 +36,6 @@ export default function DropdownMenu() {
                 type="button"
                 onClick={toggleDropdown}
                 className="flex items-center px-3 py-2 rounded-md
-                    bg-netflix-light-border text-netflix-light-secondary hover:bg-netflix-light-secondary
-                    dark:bg-netflix-dark-border dark:text-netflix-dark-secondary dark:hover:bg-netflix-dark-secondary
                     transition-colors duration-200 ease-in-out"
                 aria-expanded={isOpen}
                 aria-haspopup="true"
@@ -50,14 +48,14 @@ export default function DropdownMenu() {
 
             {isOpen && (
                 <div
-                    className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1
-                     bg-netflix-light-dark dark:bg-netflix-dark-light ring-1 ring-black ring-opacity-5
-                     focus:outline-none z-50 origin-top-right animate-fade-in-scale"
+                    className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-100 text-gray-800 
+                    hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 ring-opacity-5 
+                    focus:outline-none z-50 origin-top-right animate-fade-in-scale"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="menu-button"
                 >
-                    <div className="border-t border-netflix-light-border dark:border-netflix-dark-border my-1"></div>
+                    <div className="border-t my-1"></div>
                     <LogoutButton />
                 </div>
             )}

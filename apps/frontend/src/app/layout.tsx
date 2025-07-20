@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontVars} bg-netflix-light dark:bg-netflix-dark text-netflix-light-text dark:text-netflix-dark-text min-h-screen flex flex-col`} >
+      <body className={`${fontVars} min-h-screen flex flex-col`} >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="relative min-h-screen">
             <div className="absolute top-2 left-2 z-50 p-2 sm:p-2">

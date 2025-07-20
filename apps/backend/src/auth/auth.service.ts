@@ -58,8 +58,12 @@ export class AuthService {
       expiresIn: expiresIn,
     });
 
+    const expiresInSeconds = this.parseExpiresInToSeconds(expiresIn);
+    const expiresAt = new Date(Date.now() + expiresInSeconds * 1000);
+
     return {
       access_token: access_token,
+      expires_at: expiresAt.getTime(),
       user: {
         id: user.id,
         email: user.email,
@@ -91,4 +95,18 @@ export class AuthService {
       profiles: profiles,
     };
   }
+
+  private parseExpiresInToSeconds(expiresIn: string): number {
+    const unit = expiresIn.slice(-1);
+    const value = parseInt(expiresIn.slice(0, -1), 10);
+    
+    switch(unit) {
+      case 's': return value; // วินาที
+      case 'm': return value * 60; // นาที
+      case 'h': return value * 60 * 60; // ชั่วโมง
+      case 'd': return value * 60 * 60 * 24; // วัน
+      default: return parseInt(expiresIn, 10) || 0; // ถ้าไม่มีหน่วย ให้ถือว่าเป็นวินาที
+    }
+  }
 }
+

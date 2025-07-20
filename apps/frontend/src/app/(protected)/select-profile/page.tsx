@@ -1,11 +1,9 @@
 // apps/frontend/src/app/(protected)/select-profile/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-// import Image from 'next/image';
+import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { useSessionKeepAlive } from '@/lib/useSessionKeepAlive';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { FiEdit } from "react-icons/fi";
 import SelectProfileList from '@/components/SelectProfileList';
@@ -24,10 +22,6 @@ export default function SelectProfilePage() {
   const { user, isLoggedIn, isLoading, error } = useAuthStore(); // Added isLoading and error from store
   const router = useRouter();
   const authService = authServiceInstance;
-
-  const [isUserActive, setIsUserActive] = useState(false);
-
-  useSessionKeepAlive(isLoggedIn && isUserActive);
 
   // Initial authentication check (already in layout, but good to have a fallback/re-check)
   useEffect(() => {
@@ -55,7 +49,7 @@ export default function SelectProfilePage() {
   const profiles = user.profiles || [];
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-netflix-dark text-netflix-dark-text px-4 page-container"> {/* Adjusted background/text colors, added page-container */}
+    <main className="min-h-screen flex flex-col items-center justify-center px-4 page-container"> {/* Adjusted background/text colors, added page-container */}
       <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-8"> {/* Adjusted font sizes and weight */}
         Who&rsquo;s Watching?
       </h1>
@@ -69,7 +63,7 @@ export default function SelectProfilePage() {
 
       {/* Success / Empty State */}
       {profiles && profiles.length === 0 ? (
-        <p className="text-netflix-dark-secondary mt-6">No profiles found.</p> // Using Netflix secondary color
+        <p className="mt-6">No profiles found.</p>
       ) : (
         <SelectProfileList profiles={profiles} />
       )}
@@ -79,16 +73,6 @@ export default function SelectProfilePage() {
           <span className="mr-2">Edit</span>
           <FiEdit size={16} />
         </a>
-      </div>
-      <div className="mb-4 text-center">
-        <button
-          onClick={() => setIsUserActive(!isUserActive)}
-          className={`px-4 py-2 rounded-md text-white
-                         ${isUserActive ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700'}
-                         transition-all duration-200 ease-in-out hover:scale-105`}
-        >
-          {isUserActive ? 'User Active (Pinging)' : 'User Inactive (No Pings)'}
-        </button>
       </div>
     </main>
   );

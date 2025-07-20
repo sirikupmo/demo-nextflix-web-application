@@ -71,7 +71,7 @@ export default function MovieListPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center page-container py-10">
+    <div className="min-h-screen flex flex-col items-center page-container pb-8">
       <NowPlayingCarousel movies={nowPlayingMovies} />
       <MovieRow title="Popular Movies" movies={popularMovies} />
       <MovieRow title="Top Rated Movies" movies={topRatedMovies} />
