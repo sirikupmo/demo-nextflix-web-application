@@ -21,13 +21,13 @@ export interface Profile {
 export class ProfileRepository {
   // Mock profile data
   private profiles: Profile[] = [
-    { id: 'p1', userId: 'user1', name: 'A', avatarUrl: 'https://placehold.co/100x100/FF5733/FFFFFF?text=MP' },
-    { id: 'p2', userId: 'user1', name: 'B', avatarUrl: 'https://placehold.co/100x100/33FF57/FFFFFF?text=GP' },
-    { id: 'p3', userId: 'user1', name: 'C', avatarUrl: 'https://placehold.co/100x100/3357FF/FFFFFF?text=AP' },
-    { id: 'p4', userId: 'user2', name: 'D', avatarUrl: 'https://placehold.co/100x100/A020F0/FFFFFF?text=WP' },
-    { id: 'p5', userId: 'user2', name: 'F', avatarUrl: 'https://placehold.co/100x100/FFD700/000000?text=RP' },
-    { id: 'p6', userId: 'user2', name: 'G', avatarUrl: 'https://placehold.co/100x100/808080/FFFFFF?text=G1' },
-    { id: 'p7', userId: 'user2', name: 'H', avatarUrl: 'https://placehold.co/100x100/800080/FFFFFF?text=G2' },
+    { id: 'p1', userId: 'user1', name: 'A', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p2', userId: 'user1', name: 'B', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p3', userId: 'user1', name: 'C', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p4', userId: 'user2', name: 'D', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p5', userId: 'user2', name: 'F', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p6', userId: 'user2', name: 'G', avatarUrl: '/default-avatar.jpg' },
+    { id: 'p7', userId: 'user2', name: 'H', avatarUrl: '/default-avatar.jpg' },
   ];
 
   /**
