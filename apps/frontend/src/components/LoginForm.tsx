@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/LoadingSpinner';
 /**
  * LoginForm component.
  * Handles user input, displays loading/error states, and redirects on success.
@@ -41,7 +42,15 @@ export default function LoginForm() {
   if (isLoggedIn) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Redirecting to dashboard...</p>
+        <LoadingSpinner message="Signing in..." />
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner message="Signing in..." />
       </div>
     );
   }
@@ -65,14 +74,14 @@ export default function LoginForm() {
         <input
           type="email"
           placeholder="Enter email"
-          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
+          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Enter password"
-          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
+          className="bg-gray-100/95 rounded px-4 py-1.5 sm:py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#E50914] placeholder-[#000000B2]/50"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

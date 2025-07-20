@@ -3,13 +3,12 @@
 
 import { useEffect, useState } from 'react';
 import { movieServiceInstance } from '@/lib/movieServiceInstance';
-// import MovieCard from '@/components/MovieCard';
-// import LogoutButton from '@/components/LogoutButton';
 import NowPlayingCarousel from '@/components/NowPlayingCarousel';
 import MovieRow from '@/components/MovieRow'; 
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { Movie } from '@/domain/dtos/movie.dto';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function MovieListPage() {
 
@@ -57,7 +56,7 @@ export default function MovieListPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Loading movies...</p>
+        <LoadingSpinner message="Loading movies..."/>
       </div>
     );
   }

@@ -8,6 +8,7 @@ import { useSessionKeepAlive } from '@/lib/useSessionKeepAlive';
 import { useAuthStore } from '@/store/authStore';
 import DropdownMenu from '@/components/DropdownMenu';
 import SearchInput from '@/components/SearchInput';
+import LoadingSpinner from '@/components/LoadingSpinner';
 /**
  * Protected layout for routes that require authentication.
  * Checks authentication status and redirects to login if not authenticated.
@@ -44,7 +45,7 @@ export default function ProtectedLayout({
   if (!isInitialAuthCheckCompleted || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-lg text-gray-700">Checking authentication...</p>
+        <LoadingSpinner/>
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Display error if any during check */}
       </div>
     );

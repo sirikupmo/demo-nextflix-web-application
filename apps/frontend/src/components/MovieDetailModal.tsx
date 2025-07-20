@@ -5,7 +5,7 @@ import { Movie, MovieDetails } from '@/domain/dtos/movie.dto';
 import { X, Star } from 'lucide-react';
 import Image from 'next/image';
 import { movieServiceInstance } from '@/lib/movieServiceInstance';
-
+import LoadingSpinner from '@/components/LoadingSpinner';
 interface Props {
     movie: Movie;
     onClose: () => void;
@@ -54,7 +54,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
             <div className="relative bg-zinc-900 text-white rounded-lg overflow-hidden w-full max-w-3xl max-h-[90vh] shadow-xl overflow-y-auto custom-scrollbar">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-24">
-                        <span className="text-lg">Loading movie details...</span>
+                        <LoadingSpinner message="Loading movie details..."/>
                     </div>
                 ) : error ? (
                     <div className="p-6 text-red-400">

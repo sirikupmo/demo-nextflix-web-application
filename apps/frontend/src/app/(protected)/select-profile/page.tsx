@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { FiEdit } from "react-icons/fi";
 import SelectProfileList from '@/components/SelectProfileList';
-
+import LoadingSpinner from '@/components/LoadingSpinner';
 /**
  * Select Profile page.
  * Displays user's profiles and allows logging out.
@@ -34,7 +34,7 @@ export default function SelectProfilePage() {
   if (isLoading) { // Use isLoading from store
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Loading profiles...</p> {/* Simplified text color */}
+        <LoadingSpinner message="Loading profiles..."/>
       </div>
     );
   }

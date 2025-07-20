@@ -7,6 +7,7 @@ import { movieServiceInstance } from '@/lib/movieServiceInstance';
 import { Movie } from '@/domain/dtos/movie.dto';
 import Image from 'next/image';
 import MovieDetailModal from './MovieDetailModal';
+import LoadingSpinner from './LoadingSpinner';
 /**
  * SearchInput component.
  * Displays a search icon that opens a modal popup with a search input field.
@@ -127,7 +128,7 @@ export default function SearchInput() {
                         {/* Search Results Area */}
                         <div className="flex-grow p-6 space-y-3 overflow-y-auto custom-scrollbar"> {/* flex-grow to take remaining space, overflow-y-auto for scrolling */}
                             {loadingResults ? (
-                                <p className="text-netflix-dark-secondary text-center">Searching for...</p>
+                                <LoadingSpinner message="Searching for..." />
                             ) : searchError ? (
                                 <p className="text-red-500 text-center">⚠️ {searchError}</p>
                             ) : searchTerm.length === 0 ? (
