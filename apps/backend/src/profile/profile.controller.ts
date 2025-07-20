@@ -22,7 +22,7 @@ export class ProfileController {
   async getProfiles(@Request() req: any) {
     const userId = req.user.userId;
     const profiles = await this.profileService.getProfiles(userId);
-    return { data: profiles, message: 'Profiles fetched successfully' };
+    return { data: profiles };
   }
 
   /**
@@ -35,6 +35,6 @@ export class ProfileController {
   async getProfileById(@Param('id') profileId: string, @Request() req: any) {
     const userId = req.user.userId;
     const profile = await this.profileService.getProfileById(profileId, userId);
-    return { data: profile, message: 'Profile fetched successfully' };
+    return { data: profile };
   }
 }
