@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { useAuthStore } from '@/store/authStore';
-
+import DropdownMenu from '@/components/DropdownMenu';
 /**
  * Protected layout for routes that require authentication.
  * Checks authentication status and redirects to login if not authenticated.
@@ -61,7 +61,12 @@ export default function ProtectedLayout({
 
   // If initial auth check is complete AND logged in, render the children
   if (isLoggedIn) {
-    return <>{children}</>;
+    return <> 
+    <div className="absolute top-2 right-2 z-50 p-2 sm:p-2">
+      <DropdownMenu />
+    </div>
+    {children}
+    </>;
   }
 
   // Fallback: This case should ideally be handled by the redirect above.

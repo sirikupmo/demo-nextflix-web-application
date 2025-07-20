@@ -9,7 +9,6 @@ import { useSessionKeepAlive } from '@/lib/useSessionKeepAlive';
 import { authServiceInstance } from '@/lib/authServiceInstance';
 import { FiEdit } from "react-icons/fi";
 import SelectProfileList from '@/components/SelectProfileList';
-import LogoutButton from '@/components/LogoutButton';
 
 /**
  * Select Profile page.
@@ -74,8 +73,6 @@ export default function SelectProfilePage() {
       ) : (
         <SelectProfileList profiles={profiles} />
       )}
-
-      <LogoutButton /> {/* Use the new LogoutButton component */}
 
       <div className="fixed bottom-0 left-0 right-0 flex justify-center text-sm sm:text-base md:text-lg font-bold py-3 sm:py-4">
         <a href="#" className="hover:underline flex items-center">

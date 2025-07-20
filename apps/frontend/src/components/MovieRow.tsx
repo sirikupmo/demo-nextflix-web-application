@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import MovieCard from './MovieCard'; // ปรับ path ให้ตรงกับโปรเจกต์ของคุณ
 import { Movie } from '@/domain/dtos/movie.dto';
-
+import MovieDetailModal from './MovieDetailModal'; // ปรับ path ให้ตรงกับโปรเจกต์ของคุณ
 interface MovieRowProps {
     title: string;
     movies: Movie[];
@@ -11,7 +11,7 @@ interface MovieRowProps {
 const MovieRow: React.FC<MovieRowProps> = ({ title, movies }) => {
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const [loopedMovies, setLoopedMovies] = useState([...movies]);
-
+    const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
     const scrollLeft = () => {
         scrollRef.current?.scrollBy({ left: -1000, behavior: 'smooth' });
     };
@@ -26,6 +26,8 @@ const MovieRow: React.FC<MovieRowProps> = ({ title, movies }) => {
             scrollRef.current.scrollBy({ left: 1000, behavior: 'smooth' });
         }
     };
+
+
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-8 md:mt-12 lg:mt-12">
@@ -63,12 +65,19 @@ const MovieRow: React.FC<MovieRowProps> = ({ title, movies }) => {
                 scrollbar-hide custom-scrollbar scroll-smooth"
                 >
                     {loopedMovies.map((movie, index) => (
-                        <MovieCard key={`${movie.id}-${index}`} movie={movie} />
+                        <MovieCard key={`${movie.id}-${index}`} movie={movie} onClick={(movie) => setSelectedMovie(movie)} />
                     ))}
                 </div>
             </div>
-
+            {selectedMovie && (
+                <MovieDetailModal
+                    movie={selectedMovie}
+                    onClose={() => setSelectedMovie(null)}
+                />
+            )}
         </div>
+
+
     );
 
 };

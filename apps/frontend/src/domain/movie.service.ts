@@ -1,5 +1,5 @@
 import { MovieRepository } from '@/data/movie.repository';
-import { Movie } from './dtos/movie.dto'; 
+import { Movie, MovieDetails } from './dtos/movie.dto'; 
 /**
  * MovieService handles business logic related to movies.
  * It interacts with the MovieRepository.
@@ -45,7 +45,7 @@ export class MovieService {
      * @param language - The language code for localization.
      * @returns A promise that resolves to the movie details.
      */
-    async getMovieDetails(movieId: string, language: string = 'th-TH'): Promise<Movie> {
+    async getMovieDetails(movieId: number, language: string = 'th-TH'): Promise<MovieDetails> {
         return this.movieRepository.details(movieId, language);
     }
 

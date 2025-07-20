@@ -21,7 +21,7 @@ export default function SelectProfileList({ profiles }: SelectProfileListProps) 
                             className="object-cover w-full h-full"
                         />
                     </div>
-                    <span className="mt-2 text-xs sm:text-sm md:text-base group-hover:text-[#E50914]">
+                    <span className="mt-2 text-xs sm:text-sm md:text-base group-hover:text-[#E50914] text-center block">
                         {p.name}
                     </span>
                 </Link>

@@ -1,10 +1,11 @@
 // apps/frontend/src/app/(protected)/movies/page.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { movieServiceInstance } from '@/lib/movieServiceInstance';
 // import MovieCard from '@/components/MovieCard';
 // import LogoutButton from '@/components/LogoutButton';
+import NowPlayingCarousel from '@/components/NowPlayingCarousel';
 import MovieRow from '@/components/MovieRow'; 
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
@@ -70,7 +71,8 @@ export default function MovieListPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-8 page-container">
+    <div className="min-h-screen flex flex-col items-center page-container py-10">
+      <NowPlayingCarousel movies={nowPlayingMovies} />
       <MovieRow title="Popular Movies" movies={popularMovies} />
       <MovieRow title="Top Rated Movies" movies={topRatedMovies} />
       <MovieRow title="Upcoming Movies" movies={upcomingMovies} />

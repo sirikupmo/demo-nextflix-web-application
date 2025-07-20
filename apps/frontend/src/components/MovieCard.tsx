@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { Movie } from '@/domain/dtos/movie.dto';
 interface MovieCardProps {
   movie: Movie; // Updated type to Movie
+  onClick?: (movie: Movie) => void;
 }
+
 function useIsLargeScreen(breakpoint = 640) {
     const [isLarge, setIsLarge] = useState(false);
 
@@ -24,7 +26,7 @@ function useIsLargeScreen(breakpoint = 640) {
     return isLarge;
 }
 
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({ movie, onClick }: MovieCardProps) {
     const isLargeScreen = useIsLargeScreen(640);
 
     const imageUrl =
@@ -41,6 +43,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
     return (
         <div
+            onClick={() => onClick?.(movie)}
             className="relative group cursor-pointer rounded-md overflow-hidden shadow-md
                transform transition-all duration-300 ease-in-out hover:scale-105
                bg-netflix-dark-light dark:bg-netflix-dark-light

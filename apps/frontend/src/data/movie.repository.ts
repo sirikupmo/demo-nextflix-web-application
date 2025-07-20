@@ -1,5 +1,5 @@
 // apps/frontend/src/data/movie.repository.ts
-import { Movie } from '@/domain/dtos/movie.dto'; 
+import { Movie, MovieDetails } from '@/domain/dtos/movie.dto'; 
 export class MovieRepository {
     async popular(page: number = 1, language: string = 'th-TH'): Promise<Movie[]> {
         const response = await fetch(`/api/movies/popular?page=${page}&language=${language}`, {
@@ -79,7 +79,7 @@ export class MovieRepository {
         return result.results;
     }
 
-    async details(movieId: string, language: string = 'th-TH'): Promise<Movie> {
+    async details(movieId: number, language: string = 'th-TH'): Promise<MovieDetails> {
         const response = await fetch(`/api/movies/${movieId}?language=${language}`, {
             method: 'GET',
             credentials: 'include',
